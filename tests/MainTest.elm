@@ -25,6 +25,10 @@ suite =
         , fuzz int "A single number returns the value" <|
             \randomInt ->
                 Expect.equal randomInt (calculateString (String.fromInt randomInt))
+
+        , test "Two numbers, comma delimited, returns the sum" <|
+            \_ -> Expect.equal 9 (calculateString "3,6")
+
         ]
 
 
