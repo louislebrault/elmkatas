@@ -31,6 +31,9 @@ suite =
 
         , test "Two numbers, newline delimited, returns the sum" <|
             \_ -> Expect.equal 12 (calculateString "5\n7")
+
+        , test "Three numbers, delimited either way, returns the sum" <|
+            \_ -> Expect.equal 32 (calculateString "4\n20,8")
         ]
 
 
