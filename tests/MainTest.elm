@@ -20,20 +20,20 @@ suite : Test
 suite =
     describe "The String Calculator"
         [ test "An empty string returns zero" <|
-            \_ -> Expect.equal 0 (calculateString "")
+            \_ -> Expect.equal (Ok 0) (calculateString "")
 
         , fuzz int "A single number returns the value" <|
             \randomInt ->
-                Expect.equal randomInt (calculateString (String.fromInt randomInt))
+                Expect.equal (Ok randomInt) (calculateString (String.fromInt randomInt))
 
         , test "Two numbers, comma delimited, returns the sum" <|
-            \_ -> Expect.equal 9 (calculateString "3,6")
+            \_ -> Expect.equal (Ok 9) (calculateString "3,6")
 
         , test "Two numbers, newline delimited, returns the sum" <|
-            \_ -> Expect.equal 12 (calculateString "5\n7")
+            \_ -> Expect.equal (Ok 12) (calculateString "5\n7")
 
         , test "Three numbers, delimited either way, returns the sum" <|
-            \_ -> Expect.equal 32 (calculateString "4\n20,8")
+            \_ -> Expect.equal (Ok 32) (calculateString "4\n20,8")
 
         , test "Negative numbers throw an exception" <|
             \_ -> Expect.err (calculateString "-2")
