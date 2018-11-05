@@ -19,3 +19,4 @@ calculateString str =
   0
   (List.map mapStringToInt (splitOnComma (normalizeOperators str)))
 
+-- https://guide.elm-lang.org/v/a4b34b537117aa92fd8eba28cbdb3c93454f28db/error_handling/

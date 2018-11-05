@@ -34,6 +34,9 @@ suite =
 
         , test "Three numbers, delimited either way, returns the sum" <|
             \_ -> Expect.equal 32 (calculateString "4\n20,8")
+
+        , test "Negative numbers throw an exception" <|
+            \_ -> Expect.err (calculateString "-2")
         ]
 
 
