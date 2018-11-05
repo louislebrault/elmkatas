@@ -14,9 +14,8 @@ calculateString : String -> Result String Int
 calculateString str =
   if str == "" then Ok 0
   else if String.length str == 1 then Ok (zeroOr (String.toInt str))
+  else if String.contains "-" str then Err "Negative numbers are not supported."
   else Ok (List.foldr
   (\x a -> x + a)
   0
   (List.map mapStringToInt (splitOnComma (normalizeOperators str))))
-
--- https://guide.elm-lang.org/v/a4b34b537117aa92fd8eba28cbdb3c93454f28db/error_handling/
