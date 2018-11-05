@@ -22,9 +22,9 @@ suite =
         [ test "An empty string returns zero" <|
             \_ -> Expect.equal (Ok 0) (calculateString "")
 
-        , fuzz int "A single number returns the value" <|
-            \randomInt ->
-                Expect.equal (Ok randomInt) (calculateString (String.fromInt randomInt))
+        , test "A single number returns the value" <|
+            \_ ->
+                Expect.equal (Ok 3) (calculateString "3")
 
         , test "Two numbers, comma delimited, returns the sum" <|
             \_ -> Expect.equal (Ok 9) (calculateString "3,6")
