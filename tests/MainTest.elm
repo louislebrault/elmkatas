@@ -37,6 +37,9 @@ suite =
 
         , test "Negative numbers throw an exception" <|
             \_ -> Expect.err (calculateString "-2")
+
+        , test "Numbers greater than 1000 are ignored" <|
+            \_ -> Expect.equal (Ok 7) (calculateString "5,1001,2")
         ]
 
 

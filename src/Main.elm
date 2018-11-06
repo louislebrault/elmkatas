@@ -16,6 +16,6 @@ calculateString str =
   else if String.length str == 1 then Ok (zeroOr (String.toInt str))
   else if String.contains "-" str then Err "Negative numbers are not supported."
   else Ok (List.foldr
-  (\x a -> x + a)
+  (\x a -> if x <= 1000 then x + a else a)
   0
   (List.map mapStringToInt (splitOnComma (normalizeOperators str))))
