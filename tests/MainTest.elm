@@ -40,6 +40,9 @@ suite =
 
         , test "Numbers greater than 1000 are ignored" <|
             \_ -> Expect.equal (Ok 7) (calculateString "5,1001,2")
+
+        , test "A single char delimiter can be defined on the first line" <|
+            \_ -> Expect.equal (Ok 25) (calculateString "#\n20#2,3")
         ]
 
 
