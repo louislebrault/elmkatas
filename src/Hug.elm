@@ -8,9 +8,6 @@ import Html.Events exposing (onInput, onClick)
 
 -- Next : Display a random message, changing on click
 
-messageList = Array.fromList ["cc", "tavu", "sposé", "Lorem ipsum.", "booh"]
--- randomMessage = Array.get (Random.generate (Random.int 0 (List.length messageList))) messageList
-
 -- MAIN
 main = Browser.sandbox { init = init, update = update, view = view }
 
@@ -22,10 +19,15 @@ type alias Model =
   }
 
 init : Model
-init = { kirby = "(>'.')>", message = randomMessage }
+init = { kirby = "(>'.')>", message = "" }
 
 -- UPDATE
+messageList = Array.fromList ["cc", "tavu", "sposé", "Lorem ipsum.", "booh"]
 
+randomIndex = Random.generate getMessageByIndex (Random.int 0 2)
+
+getMessageByIndex : Int -> String
+getMessageByIndex idx = Maybe.withDefault "Moga" (Array.get idx messageList)
 type Msg = Dance
 
 update : Msg -> Model -> Model
