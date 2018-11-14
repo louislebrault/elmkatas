@@ -1,18 +1,28 @@
+import Array
+import Random
 import Browser
 import Html exposing (Html, button, div, text)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onInput, onClick)
 
+
 -- Next : Display a random message, changing on click
+
+messageList = Array.fromList ["cc", "tavu", "sposé", "Lorem ipsum.", "booh"]
+-- randomMessage = Array.get (Random.generate (Random.int 0 (List.length messageList))) messageList
 
 -- MAIN
 main = Browser.sandbox { init = init, update = update, view = view }
 
 -- MODEL
-type alias Model = String
+type alias Model =
+  {
+  kirby: String,
+  message: String
+  }
 
 init : Model
-init = "(>'.')>"
+init = { kirby = "(>'.')>", message = randomMessage }
 
 -- UPDATE
 
