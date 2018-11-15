@@ -20,11 +20,9 @@ main =
 
 -- MODEL
 
-
 type alias Model =
   { dieFace : Int
   }
-
 
 init : () -> (Model, Cmd Msg)
 init _ =
@@ -32,19 +30,20 @@ init _ =
   , Cmd.none
   )
 
-
-
 -- UPDATE
 
-
+-- Ca veut dire quoi ces opérateurs = et | ?
 type Msg
   = Roll
   | NewFace Int
 
-
+-- Cmd c'est pour gérer les side effects, apparemment généré un chiffre random c'est considéré comme un
+-- side effect
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
   case msg of
+  -- Cette syntaxe avec les parenthèses, ca représente un Tupple. C'est une data stucture qui permet
+  -- de retourner plusieurs valeurs.
     Roll ->
       ( model
       , Random.generate NewFace (Random.int 1 6)
@@ -55,15 +54,12 @@ update msg model =
       , Cmd.none
       )
 
-
-
 -- SUBSCRIPTIONS
 
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
   Sub.none
-
 
 
 -- VIEW
