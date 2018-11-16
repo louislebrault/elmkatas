@@ -5,8 +5,7 @@ import Html exposing (Html, button, div, text)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onInput, onClick)
 
-
--- Next : What next ?
+-- Next : Do something with subscriptions
 
 -- MAIN
 main = Browser.element
@@ -30,29 +29,30 @@ init _ =
   )
 
 -- UPDATE
-messageList = Array.fromList ["cc", "tavu", "sposé", "Calin.", "booh"]
-
-randomIndex = Random.generate RandomIndex (Random.int 0 (Array.length messageList))
-
-getMessageByIndex : Int -> String
-getMessageByIndex idx = Maybe.withDefault "Moga" (Array.get idx messageList)
 type Msg
   = Dance
   | RandomIndex Int
+
+messageList = Array.fromList ["cc", "tavu", "sposé", "Calin.", "booh"]
+
+getMessageByIndex : Int -> String
+getMessageByIndex idx = Maybe.withDefault "Moga" (Array.get idx messageList)
+
+generateRandomInt : Cmd Msg
+generateRandomInt = Random.generate RandomIndex (Random.int 0 (Array.length messageList))
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
   case msg of
     Dance ->
       if model.kirby == "(>'.')>"
-      then ( {kirby = "<('.'<)", message = model.message }, randomIndex)
-      else ( {kirby = "(>'.')>", message = model.message }, randomIndex)
+      then ( {kirby = "<('.'<)", message = model.message }, generateRandomInt)
+      else ( {kirby = "(>'.')>", message = model.message }, generateRandomInt)
 
     RandomIndex idx ->
       ( {kirby = model.kirby, message = getMessageByIndex idx }, Cmd.none)
 
 -- SUBSCRIPTIONS
-
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
