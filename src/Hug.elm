@@ -6,10 +6,15 @@ import Html.Attributes exposing (..)
 import Html.Events exposing (onInput, onClick)
 
 
--- Next : Display a random message, changing on click
+-- Next : What next ?
 
 -- MAIN
-main = Browser.sandbox { init = init, update = update, view = view }
+main = Browser.element
+    { init = init
+    , update = update
+    , subscriptions = subscriptions
+    , view = view
+    }
 
 -- MODEL
 type alias Model =
@@ -18,23 +23,40 @@ type alias Model =
   message: String
   }
 
-init : Model
-init = { kirby = "(>'.')>", message = "" }
+init : () -> (Model, Cmd Msg)
+init _ =
+  ( Model "(>'.')>" ""
+  , Cmd.none
+  )
 
 -- UPDATE
-messageList = Array.fromList ["cc", "tavu", "sposé", "Lorem ipsum.", "booh"]
+messageList = Array.fromList ["cc", "tavu", "sposé", "Calin.", "booh"]
 
-randomIndex = Random.generate getMessageByIndex (Random.int 0 2)
+randomIndex = Random.generate RandomIndex (Random.int 0 (Array.length messageList))
 
 getMessageByIndex : Int -> String
 getMessageByIndex idx = Maybe.withDefault "Moga" (Array.get idx messageList)
-type Msg = Dance
+type Msg
+  = Dance
+  | RandomIndex Int
 
-update : Msg -> Model -> Model
+update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
   case msg of
     Dance ->
-      if model == "(>'.')>" then "<('.'<)" else "(>'.')>"
+      if model.kirby == "(>'.')>"
+      then ( {kirby = "<('.'<)", message = model.message }, randomIndex)
+      else ( {kirby = "(>'.')>", message = model.message }, randomIndex)
+
+    RandomIndex idx ->
+      ( {kirby = model.kirby, message = getMessageByIndex idx }, Cmd.none)
+
+-- SUBSCRIPTIONS
+
+
+subscriptions : Model -> Sub Msg
+subscriptions model =
+  Sub.none
 
 -- VIEW
 
@@ -42,5 +64,6 @@ view : Model -> Html Msg
 view model =
   div []
     [ button [ onClick Dance ] [ text "Make meh dance <3" ]
-    , div [] [ text model ]
+    , div [] [ text model.kirby ]
+    , div [] [ text model.message ]
     ]
