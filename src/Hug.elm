@@ -9,7 +9,9 @@ import Html.Attributes exposing (..)
 import Html.Events exposing (onInput, onClick)
 
 -- Next : A chaque fois qu'on appuie sur espace, changer la couleur de la page
--- Comment definir quelle touche a été pressée : https://github.com/elm/browser/blob/1.0.0/notes/keyboard.md
+-- D'abord changer background color sur n'importe quel keydown
+-- Puis ensuite n'écouter qu'espace
+-- Comment faire pour me servir de ma methode generateRandomInt pour generer soit une couleur random soit un index random ?
 
 -- MAIN
 main = Browser.element
@@ -23,12 +25,13 @@ main = Browser.element
 type alias Model =
   {
   kirby: String,
-  message: String
+  message: String,
+  bgColor: String
   }
 
 init : () -> (Model, Cmd Msg)
 init _ =
-  ( Model "(>'.')>" ""
+  ( Model "(>'.')>" "" ""
   , Cmd.none
   )
 
@@ -38,7 +41,8 @@ type Msg
   | RandomIndex Int
   | KeyMsg
 
-messageList = Array.fromList ["cc", "tavu", "sposé", "Calin.", "booh"]
+messageList = Array.fromList ["cc", "tavu", "sposé", "sandun", "booh"]
+colorList = Array.fromList ["green", "pink", "red", "yellow", "gray", "orange", "lightblue"]
 
 getMessageByIndex : Int -> String
 getMessageByIndex idx = Maybe.withDefault "Moga" (Array.get idx messageList)
@@ -54,29 +58,31 @@ keyDecoder : Decode.Decoder Msg
 keyDecoder =
   Decode.map toKey (Decode.field "key" Decode.string)
 
-toKey : String -> Key
+toKey : String -> Msg
 toKey string =
   case String.uncons string of
     Just (char, "") ->
-      Character char
+      KeyMsg
 
     _ ->
-      Control string
+      KeyMsg
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
   case msg of
     Dance ->
       if model.kirby == "(>'.')>"
-      then ( { kirby = "<('.'<)", message = model.message }, generateRandomInt)
-      else ( { kirby = "(>'.')>", message = model.message }, generateRandomInt)
+      then ( { kirby = "<('.'<)", message = model.message, bgColor = model.bgColor }, generateRandomInt)
+      else ( { kirby = "(>'.')>", message = model.message, bgColor = model.bgColor }, generateRandomInt)
 
     RandomIndex idx ->
-      ( { kirby = model.kirby, message = getMessageByIndex idx }, Cmd.none)
+      ( { kirby = model.kirby, message = getMessageByIndex idx, bgColor = model.bgColor }, Cmd.none)
+
+    KeyMsg ->
+      ( { kirby = model.kirby, message = model.message, bgColor = "green" }, Cmd.none )
 
 -- SUBSCRIPTIONS
 
-subscriptions : Model -> Sub Msg
 subscriptions model =
   Sub.batch
     [ Events.onKeyDown keyDecoder ]
@@ -85,7 +91,10 @@ subscriptions model =
 
 view : Model -> Html Msg
 view model =
-  div []
+  div [
+      style "background-color" model.bgColor,
+      style "height"  "100vh"
+    ]
     [ button [ onClick Dance ] [ text "Make meh dance <3" ]
     , div [] [ text model.kirby ]
     , div [] [ text model.message ]
